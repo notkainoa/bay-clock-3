@@ -65,6 +65,8 @@ const { activityName, activityDays, activitySchedule }
 
 const selectedPreset = ref<string | null>(null);
 
+const PRESET_TRACK = 'Track';
+
 const presetOptions = [
   'Softball',
   'Baseball',
@@ -73,21 +75,21 @@ const presetOptions = [
   'Boys Tennis',
   'Girls Lacrosse',
   'Boys Lacrosse',
-  'Track',
+  PRESET_TRACK,
   'Swimming',
 ];
 
 const presetScheduleMap: Record<string, { start: string, end: string }> = {
   default: { start: '15:50', end: '17:30' },
-  Track: { start: '15:30', end: '17:30' },
+  [PRESET_TRACK]: { start: '15:30', end: '17:30' },
 };
 
 watch(selectedPreset, (preset) => {
   if (!preset) return;
   activityName.value = preset;
+  const schedule = presetScheduleMap[preset] || presetScheduleMap.default;
   for (const day of Object.keys(activityDays.value)) {
     activityDays.value[day] = true;
-    const schedule = presetScheduleMap[preset] || presetScheduleMap.default;
     activitySchedule.value[day].start = schedule.start;
     activitySchedule.value[day].end = schedule.end;
   }
