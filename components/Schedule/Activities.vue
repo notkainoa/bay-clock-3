@@ -1,5 +1,19 @@
 <template>
   <div class="space-y-4">
+    <div class="space-y-2">
+      <p class="text-xl font-semibold">
+        Preset Activity
+      </p>
+      <USelectMenu
+        v-model="selectedPreset"
+        :options="presetOptions"
+        placeholder="Choose an activity"
+        class="w-full"
+      />
+      <p class="text-sm text-gray-500">
+        Selecting a preset fills the activity name and weekly times. You can still edit below.
+      </p>
+    </div>
     <p class="text-xl font-semibold">
       Name
     </p>
@@ -48,4 +62,34 @@ import { useCustomScheduleStore } from '~/stores/customSchedule';
 const customScheduleStore = useCustomScheduleStore();
 const { activityName, activityDays, activitySchedule }
   = storeToRefs(customScheduleStore);
+
+const selectedPreset = ref<string | null>(null);
+
+const presetOptions = [
+  'Softball',
+  'Baseball',
+  'Boys Volleyball',
+  'Boys Golf',
+  'Boys Tennis',
+  'Girls Lacrosse',
+  'Boys Lacrosse',
+  'Track',
+  'Swimming',
+];
+
+const presetScheduleMap: Record<string, { start: string, end: string }> = {
+  default: { start: '15:50', end: '17:30' },
+  Track: { start: '15:30', end: '17:30' },
+};
+
+watch(selectedPreset, (preset) => {
+  if (!preset) return;
+  activityName.value = preset;
+  for (const day of Object.keys(activityDays.value)) {
+    activityDays.value[day] = true;
+    const schedule = presetScheduleMap[preset] || presetScheduleMap.default;
+    activitySchedule.value[day].start = schedule.start;
+    activitySchedule.value[day].end = schedule.end;
+  }
+});
 </script>
