@@ -14,43 +14,49 @@
         Selecting a preset fills the activity name and weekly times. You can still edit below.
       </p>
     </div>
-    <p class="text-xl font-semibold">
-      Name
-    </p>
-    <UInput
-      v-model="activityName"
-      placeholder="Activities + Sports/Drama"
-      class="w-full"
-    />
-    <p class="text-xl font-semibold">
-      Schedule
-    </p>
-    <div class="flex flex-col space-y-4">
-      <div
-        v-for="day in Object.keys(activityDays)"
-        :key="day"
-        class="flex flex-row items-center gap-4"
-        :class="{ 'text-gray-400': !activityDays[day] }"
-      >
-        <UCheckbox v-model="activityDays[day]" />
-        <p class="font-semibold">
-          {{ day }}
-        </p>
-        <UInput
-          v-model="activitySchedule[day].start"
-          placeholder="Enter a club name"
-          type="time"
-          class="w-full"
-          :disabled="!activityDays[day]"
-        />
-        <p>-</p>
-        <UInput
-          v-model="activitySchedule[day].end"
-          placeholder="Enter a club name"
-          type="time"
-          class="w-full"
-          :disabled="!activityDays[day]"
-        />
+    <div :class="{ 'opacity-50': isPresetActive }">
+      <p class="text-xl font-semibold">
+        Name
+      </p>
+      <UInput
+        v-model="activityName"
+        placeholder="Activities + Sports/Drama"
+        class="w-full"
+        :disabled="isPresetActive"
+      />
+      <p class="text-xl font-semibold">
+        Schedule
+      </p>
+      <div class="flex flex-col space-y-4">
+        <div
+          v-for="day in Object.keys(activityDays)"
+          :key="day"
+          class="flex flex-row items-center gap-4"
+          :class="{ 'text-gray-400': !activityDays[day] || isPresetActive }"
+        >
+          <UCheckbox
+            v-model="activityDays[day]"
+            :disabled="isPresetActive"
+          />
+          <p class="font-semibold">
+            {{ day }}
+          </p>
+          <UInput
+            v-model="activitySchedule[day].start"
+            placeholder="Enter a club name"
+            type="time"
+            class="w-full"
+            :disabled="!activityDays[day] || isPresetActive"
+          />
+          <p>-</p>
+          <UInput
+            v-model="activitySchedule[day].end"
+            placeholder="Enter a club name"
+            type="time"
+            class="w-full"
+            :disabled="!activityDays[day] || isPresetActive"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -67,16 +73,17 @@ const selectedPreset = ref<string | null>(null);
 
 const PRESET_TRACK = 'Track';
 
-const presetOptions = [
-  'Softball',
-  'Baseball',
-  'Boys Volleyball',
-  'Boys Golf',
-  'Boys Tennis',
-  'Girls Lacrosse',
-  'Boys Lacrosse',
-  PRESET_TRACK,
-  'Swimming',
+const presetOptions: Array<{ label: string, value: string | null }> = [
+  { label: 'No preset', value: null },
+  { label: 'Softball', value: 'Softball' },
+  { label: 'Baseball', value: 'Baseball' },
+  { label: 'Boys Volleyball', value: 'Boys Volleyball' },
+  { label: 'Boys Golf', value: 'Boys Golf' },
+  { label: 'Boys Tennis', value: 'Boys Tennis' },
+  { label: 'Girls Lacrosse', value: 'Girls Lacrosse' },
+  { label: 'Boys Lacrosse', value: 'Boys Lacrosse' },
+  { label: PRESET_TRACK, value: PRESET_TRACK },
+  { label: 'Swimming', value: 'Swimming' },
 ];
 
 const presetScheduleMap: Record<string, { start: string, end: string }> = {
@@ -94,4 +101,6 @@ watch(selectedPreset, (preset) => {
     activitySchedule.value[day].end = schedule.end;
   }
 });
+
+const isPresetActive = computed(() => Boolean(selectedPreset.value));
 </script>
