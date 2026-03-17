@@ -1,0 +1,23 @@
+cloudflare/menu-admin/src/index.js
+  4f3923d5e3847ed7 912,951-959,1100,1300,1306,1326,1332
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.12",
+  "base_commit_sha": "a409eb0bd052da2ed89a1f585877a65a768430de",
+  "prompts": {
+    "4f3923d5e3847ed7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019cf9e9-1817-7071-855e-be13ff3158e1",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Kainoa Newton <k@kainoa.me>",
+      "messages": [],
+      "total_additions": 15,
+      "total_deletions": 7,
+      "accepted_lines": 15,
+      "overriden_lines": 0
+    }
+  }
+}
