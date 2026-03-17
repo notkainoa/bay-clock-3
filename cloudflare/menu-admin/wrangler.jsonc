@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bay-clock-menu-admin",
+  "main": "src/index.js",
+  "compatibility_date": "2026-03-16",
+  "workers_dev": true,
+  "vars": {
+    "GITHUB_OWNER": "notkainoa",
+    "GITHUB_REPO": "bay-clock-3",
+    "GITHUB_DEFAULT_BRANCH": "main",
+    "GITHUB_INBOX_BRANCH": "menu-upload-inbox",
+    "UPLOAD_MAX_BYTES": "15728640"
+  }
+}
