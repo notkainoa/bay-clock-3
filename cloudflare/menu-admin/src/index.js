@@ -909,6 +909,7 @@ function renderPage(env) {
         border: 1px dashed var(--line-strong);
         border-radius: 24px;
         background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
         transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
       }
 
@@ -947,7 +948,15 @@ function renderPage(env) {
       }
 
       .file-input {
-        display: none;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       .review-stack {
@@ -1088,7 +1097,7 @@ function renderPage(env) {
   <body>
     <div id="app"></div>
     <script id="app-config" type="application/json">${serializeForHtml(config)}</script>
-    <script>(${clientApp.toString()})();</script>
+    <script>const __name = (target) => target; (${clientApp.toString()})();</script>
   </body>
 </html>`;
 }
@@ -1288,13 +1297,13 @@ function clientApp() {
             <h1>Upload</h1>
             <p class="lede">Select the next menu file. Nothing is written to GitHub until you confirm it on the review screen.</p>
           </div>
-          <div class="dropzone dropzone--large" id="upload-dropzone" role="button" tabindex="0" aria-label="Upload a PDF or JPG">
+          <label class="dropzone dropzone--large" id="upload-dropzone" for="upload-input" role="button" tabindex="0" aria-label="Upload a PDF or JPG">
             <input class="file-input" id="upload-input" type="file" accept=".pdf,.jpg,.jpeg,application/pdf,image/jpeg" />
             <div class="stack">
               <div class="dropzone__title">Drop a PDF or JPG here</div>
               <div class="dropzone__subtitle">or click to browse</div>
             </div>
-          </div>
+          </label>
           <p class="subtle">Accepted types: PDF, JPG, JPEG. Max ${escapeHtml(formatFileLimit(config.maxBytes))}.</p>
           <div class="message ${message && (state.uploadError || pageError) ? "message--error" : ""}">${escapeHtml(message)}</div>
         </section>
@@ -1314,13 +1323,13 @@ function clientApp() {
           <button class="button button--ghost" type="button" data-action="logout">Log out</button>
         </div>
         <section class="card flow-card review-stack">
-          <div class="dropzone dropzone--compact" id="replace-dropzone" role="button" tabindex="0" aria-label="Replace selected file">
+          <label class="dropzone dropzone--compact" id="replace-dropzone" for="replace-input" role="button" tabindex="0" aria-label="Replace selected file">
             <input class="file-input" id="replace-input" type="file" accept=".pdf,.jpg,.jpeg,application/pdf,image/jpeg" />
             <div class="stack">
               <div><strong>Replace selected file</strong></div>
               <div class="subtle">Drop another PDF or JPG here, or click to browse.</div>
             </div>
-          </div>
+          </label>
           <div class="comparison">
             <section class="panel">
               <div class="panel__header">
@@ -1582,7 +1591,6 @@ function clientApp() {
       }
     };
 
-    dropzone.addEventListener("click", openPicker);
     dropzone.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
